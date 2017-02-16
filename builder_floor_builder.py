@@ -5,7 +5,7 @@
 import bpy
 
 # Define a variable which holds the reference to the solidify modifier
-ob_modifier = None
+#ob_modifier = None
 
 class create_floor(bpy.types.Operator):
     
@@ -14,6 +14,8 @@ class create_floor(bpy.types.Operator):
     bl_description = 'Add a floor object to current scene'
     bl_category = 'Builder'
     bl_options = {'REGISTER', 'UNDO'}
+    
+    ob_modifier = None
     
     def draw(self, context):
         
@@ -32,7 +34,7 @@ class create_floor(bpy.types.Operator):
 
 def create_object(self, context):
     
-    global ob_modifier
+#    global ob_modifier
     # Deselect all objects before adding the floor object
     
     objects = context.scene.objects
@@ -59,9 +61,6 @@ def create_object(self, context):
     mesh.update()
     mesh_object.select = True
     context.scene.objects.active = mesh_object
-    ob_modifier = mesh_object.modifiers.new('solidify', type = 'SOLIDIFY')
-    ob_modifier.thickness = 0
-    mesh_object.floor_property[0].modifier = ob_modifier
 #    ob.floor_property[0].floor_length = 
 
 def update_object(self, context):
@@ -71,7 +70,18 @@ def update_object(self, context):
     # Check if the thickness of the floor is greater then 0.
     # If true then change the thickness attribute of the modifier
     
-    ob.floor_property[0].modifier.thickness = ob.floor_property[0].floor_thickness
+    if ob.floor_property[0].floor_thickness != 0:
+        if create_floor.ob_modifier is None or create_floor.ob_modifier.name == "":
+            
+            create_floor.ob_modifier = ob.modifiers.new('Solidify', 'SOLIDIFY')
+            create_floor.ob_modifier.thickness = ob.floor_property[0].floor_thickness
+        else:
+            create_floor.ob_modifier.thickness = ob.floor_property[0].floor_thickness
+    else:
+        if create_floor.ob_modifier is not None:
+            ob.modifiers.remove(create_floor.ob_modifier)
+            create_floor.ob_modifier = None
+    #ob.floor_property[0].modifier.thickness = ob.floor_property[0].floor_thickness
     
 class FloorProperty(bpy.types.PropertyGroup):
     
