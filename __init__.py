@@ -35,6 +35,7 @@ if "bpy" in locals():
     import imp
     imp.reload(builder_door_builder)
     imp.reload(builder_floor_builder)
+    imp.reload(builder_window_builder)
     print("#---------------------------------#")
     print("Reloaded multifiles")
     print("#---------------------------------#")
@@ -43,6 +44,7 @@ else:
     
     import builder_door_builder
     import builder_floor_builder
+    import builder_window_builder
     print("#---------------------------------#")
     print("Imported multifiles")
     print("#---------------------------------#")
@@ -60,6 +62,7 @@ class INFO_MT_add_builder_menu(bpy.types.Menu):
         
         layout.operator('mesh.builder_door_builder', text = 'Add Door', icon = 'PLUGIN')
         layout.operator('mesh.builder_floor_builder', text = 'Add Floor', icon = 'PLUGIN')
+        layout.operator('mesh.builder_window_builder', text = 'Add Window', icon = 'PLUGIN')
         
 #-------------------------------------------------
 #   Draw function for builder main menu
@@ -79,8 +82,10 @@ def register():
     bpy.utils.register_class(INFO_MT_add_builder_menu)
     bpy.utils.register_class(builder_door_builder.create_door)
     bpy.utils.register_class(builder_floor_builder.create_floor)
+    bpy.utils.register_class(builder_window_builder.create_window)
 #    bpy.utils.register_class(builder_floor_builder.FloorProperty)
     bpy.utils.register_class(builder_floor_builder.VIEW3D_PT_floor_builder_config)
+    bpy.utils.register_class(builder_window_builder.VIEW3D_PT_window_builder_config)
     bpy.types.INFO_MT_mesh_add.append(BuilderMenuFunc)
     
 def unregister():
@@ -88,8 +93,10 @@ def unregister():
     bpy.utils.unregister_class(INFO_MT_add_builder_menu)
     bpy.utils.unregister_class(builder_door_builder.create_door)
     bpy.utils.unregister_class(builder_floor_builder.create_floor)
+    bpy.utils.unregister_class(builder_window_builder.create_window)
 #    bpy.utils.unregister_class(builder_floor_builder.FloorProperty)
     bpy.utils.unregister_class(builder_floor_builder.VIEW3D_PT_floor_builder_config)
+    bpy.utils.unregister_class(builder_window_builder.VIEW3D_PT_window_builder_config)
     bpy.types.INFO_MT_mesh_add.remove(BuilderMenuFunc)
     
 if __name__ == '__main__':
